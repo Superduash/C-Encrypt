@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d1117,50:1a1a2e,100:16213e&height=180&section=header&text=C-Encrypt&fontSize=68&fontColor=00d4ff&animation=fadeIn&fontAlignY=38&desc=Secure%20File%20Encryption%20Platform&descAlignY=60&descSize=18&descColor=8892b0"/>
+  <img src="https://capsule-render.vercel.app/api?type=waving&height=220&color=0:0d1117,50:0f3460,100:00d4ff&text=C-Encrypt&fontSize=56&fontColor=ffffff&animation=fadeIn&fontAlignY=40&desc=Secure%20File%20Encryption%20Platform&descAlignY=60&descColor=c9d1d9&descSize=18"/>
 </p>
 
 <div align="center">
@@ -151,5 +151,5 @@ Built with Python and security principles.
 </div>
 
 <p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:16213e,50:1a1a2e,100:0d1117&height=120&section=footer"/>
+  <img src="https://capsule-render.vercel.app/api?type=waving&height=120&section=footer&color=0:00d4ff,50:0f3460,100:0d1117"/>
 </p>
