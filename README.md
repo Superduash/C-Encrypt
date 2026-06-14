@@ -1,146 +1,102 @@
-<a id="readme-top"></a>
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&height=260&color=0:0f172a,50:0ea5e9,100:06b6d4&text=C-Encrypt&fontSize=70&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Secure%20Multi-User%20File%20Encryption%20Platform&descAlignY=58&descSize=18"/>
+</p>
 
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=venom&color=0:0f172a,100:1e293b&height=190&section=header&text=C-Encrypt&fontSize=64&fontColor=e2e8f0&animation=fadeIn&fontAlignY=40&desc=Secure%20Terminal%20File%20Vault&descAlignY=65&descSize=16&descColor=94a3b8"/>
+### 🔒 Encrypt • Store • Verify • Share
 
-### 🔒 Secure • Offline • Multi-User • Auditable
-
-A terminal-based encrypted file vault built with Python featuring secure authentication, file encryption, integrity verification, and administrative controls.
+A secure terminal-based file vault built with Python that enables encrypted file storage, key management, user authentication, integrity verification, and administrative controls.
 
 <br>
 
 <img src="https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
-<img src="https://img.shields.io/badge/Encryption-Fernet_AES_128-0ea5e9?style=for-the-badge"/>
-<img src="https://img.shields.io/badge/Auth-PBKDF2_HMAC_SHA256-10b981?style=for-the-badge"/>
-<img src="https://img.shields.io/badge/Platform-Windows-0078d4?style=for-the-badge&logo=windows"/>
-<img src="https://img.shields.io/badge/License-MIT-f59e0b?style=for-the-badge"/>
-
-<br><br>
-
-<a href="#preview">Preview</a> • <a href="#features">Features</a> • <a href="#security">Security</a> • <a href="#installation">Installation</a>
+<img src="https://img.shields.io/badge/Encryption-Fernet_AES-00d4ff?style=for-the-badge"/>
+<img src="https://img.shields.io/badge/Security-PBKDF2_HMAC_SHA256-success?style=for-the-badge"/>
+<img src="https://img.shields.io/badge/Platform-Windows-0078D6?style=for-the-badge&logo=windows"/>
+<img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge"/>
 
 </div>
 
 ---
 
-## 📸 Preview
+# 📸 Preview
 
-<div align="center">
+<p align="center">
+  <img src="assets/demo.gif" width="900">
+</p>
 
-<img src="logo.png" width="220"/>
-
-</div>
-
-> Replace this image with a 10–15 second demo GIF showing Login → Encrypt → Decrypt → Admin Panel.
+> Replace with a GIF showing Login → Encrypt → Decrypt → Admin Panel
 
 ---
 
-## 📖 About
+# 🚀 Why C-Encrypt?
 
-C-Encrypt is a secure command-line file vault designed to demonstrate encryption, authentication, key management, and audit logging principles.
+Most file encryption projects stop at simply encrypting and decrypting files.
 
-Unlike simple file encryption scripts, C-Encrypt includes:
+C-Encrypt simulates a complete secure file management system with:
 
-* Multi-user authentication
-* Role-based access control
-* File integrity verification
-* Encryption key management
-* Activity logging
-* Administrative controls
+- Multi-user authentication
+- Role-based access control
+- File encryption
+- Encryption key management
+- Integrity verification
+- Audit logging
+- Administrative controls
 
-All while running completely offline.
-
----
-
-## ✨ Features
-
-<table>
-<tr>
-<td width="50%">
-
-### 👤 User Features
-
-* Encrypt files securely
-* Decrypt files using keys
-* Share encryption keys
-* Verify file integrity
-* Backup encryption keys
-* View activity history
-* Change password
-* Delete account
-
-</td>
-
-<td width="50%">
-
-### 🛡️ Admin Features
-
-* Manage users
-* Reset passwords
-* View system logs
-* Export logs
-* Maintenance mode
-* Remove orphaned files
-* View statistics
-* Delete user accounts
-
-</td>
-</tr>
-</table>
+All running completely offline.
 
 ---
 
-## 🔒 Security
+# ✨ Features
 
-| Component              | Implementation      |
-| ---------------------- | ------------------- |
-| Password Hashing       | PBKDF2-HMAC-SHA256  |
-| Iterations             | 100,000             |
-| File Encryption        | Fernet AES-128      |
-| Integrity Verification | SHA256              |
-| Audit Logging          | Timestamped Events  |
-| Key Storage            | Isolated From Files |
+## 👤 User Features
 
-### Security Highlights
+- Encrypt files securely
+- Decrypt files with matching keys
+- Share encryption keys
+- Backup encryption keys
+- Verify file integrity
+- Manage account credentials
+- View activity history
 
-✅ No plaintext passwords
+## 🛡️ Admin Features
 
-✅ Unique encryption key per file
-
-✅ SHA256 integrity verification
-
-✅ Separate key storage
-
-✅ Full audit logging
-
-✅ Offline operation
+- Manage users
+- Force password resets
+- View complete audit logs
+- Export system logs
+- Toggle maintenance mode
+- Remove inactive accounts
+- Monitor system activity
 
 ---
 
-## 🛠️ Built With
+# 🔐 Security Highlights
 
-<div align="center">
+| Security Layer | Implementation |
+|---------------|---------------|
+| Authentication | PBKDF2-HMAC-SHA256 |
+| Encryption | Fernet AES |
+| Integrity Verification | SHA256 Checksums |
+| Key Management | Isolated Key Storage |
+| Logging | Full Audit Trail |
+| Password Migration | Automatic Legacy Upgrade |
 
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" width="60"/>
-&nbsp;&nbsp;
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" width="60"/>
-&nbsp;&nbsp;
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/windows8/windows8-original.svg" width="60"/>
+### Security Principles
 
-</div>
-
-<br>
-
-| Library      | Purpose                             |
-| ------------ | ----------------------------------- |
-| cryptography | Encryption & key generation         |
-| hashlib      | Password hashing & integrity checks |
-| colorama     | Terminal colors & formatting        |
+```text
+✓ No plaintext passwords
+✓ Unique encryption key per file
+✓ SHA256 integrity validation
+✓ Key isolation architecture
+✓ Complete activity logging
+✓ Offline operation
+```
 
 ---
 
-## 🚀 Installation
+# ⚡ Quick Start
 
 ### Clone Repository
 
@@ -155,107 +111,105 @@ cd C-Encrypt
 pip install -r requirements.txt
 ```
 
-### Launch
+### Run
 
 ```bash
 python main.py
 ```
 
-### Windows Users
+### Windows Launcher
 
-Simply run:
-
-```bash
+```text
 start.bat
 ```
 
-The launcher automatically:
+Automatically:
 
-* Checks Python installation
-* Installs dependencies
-* Starts the application
-
----
-
-## 🎯 Usage
-
-### Default Administrator
-
-```text
-Username : Admin
-Password : admin
-```
-
-Change this password immediately after first login.
-
-### Password Rules
-
-* Minimum 8 characters
-* At least one uppercase letter
-* At least one number
+- Checks Python
+- Installs dependencies
+- Launches application
 
 ---
 
-## 📂 Project Structure
+# 🏗️ Tech Stack
 
-```text
-C-Encrypt/
-│
-├── main.py
-├── start.bat
-├── requirements.txt
-│
-└── cstorage/
-    ├── encrypted/
-    ├── keys/
-    ├── decrypted/
-    ├── backups/
-    ├── users.txt
-    ├── logs.txt
-    └── metadata.json
-```
+<div align="center">
+
+<img src="https://skillicons.dev/icons?i=python" height="55"/>
+<img src="https://skillicons.dev/icons?i=windows" height="55"/>
+
+</div>
+
+<br>
+
+| Library | Purpose |
+|----------|----------|
+| cryptography | File encryption & key generation |
+| hashlib | Password hashing & integrity checks |
+| colorama | Enhanced terminal UI |
 
 ---
 
-## 🗺️ Roadmap
+# 📊 Project Overview
 
-* [x] Multi-user authentication
-* [x] File encryption
-* [x] Audit logging
-* [x] Key management
-* [ ] GUI version
-* [ ] Linux installer
-* [ ] Docker support
-* [ ] MFA authentication
-* [ ] Cloud backup support
-
----
-
-## 🎓 What I Learned
-
-* Applied Cryptography
-* Secure Authentication Systems
-* Role-Based Access Control
-* File Integrity Verification
-* Audit Logging
-* Python Application Design
+| Category | Details |
+|----------|----------|
+| Language | Python |
+| Interface | CLI / Terminal |
+| Authentication | Multi-User |
+| Authorization | Role-Based |
+| Encryption | Fernet AES |
+| Storage | Local |
+| Platform | Windows |
 
 ---
 
-## 📄 License
+# 📁 Screenshots
 
-Distributed under the MIT License.
+<p align="center">
+
+<img src="assets/login.png" width="700">
+
+<br><br>
+
+<img src="assets/encryption.png" width="700">
+
+<br><br>
+
+<img src="assets/admin.png" width="700">
+
+</p>
+
+---
+
+# 🛣️ Future Improvements
+
+- [ ] GUI Version
+- [ ] Linux Installer
+- [ ] Docker Deployment
+- [ ] Multi-Factor Authentication
+- [ ] SQLite Database Migration
+- [ ] Secure Cloud Backup
+- [ ] REST API Support
+
+---
+
+# 📄 License
+
+MIT License
+
+Free to use, modify, and distribute.
 
 ---
 
 <div align="center">
 
-### ⭐ If you found this project interesting, consider starring the repository.
+### ⭐ If you found this project interesting, consider starring the repository
 
-Built by Ashwin for the ITD2102 Python Mini Project.
+Built by **Ashwin** using Python and modern security principles.
 
 </div>
 
 <p align="center">
-<img src="https://capsule-render.vercel.app/api?type=venom&color=0:1e293b,100:0f172a&height=120&section=footer"/>
+  <img src="https://capsule-render.vercel.app/api?type=waving&height=180&section=footer&color=0:06b6d4,50:0ea5e9,100:0f172a"/>
 </p>
