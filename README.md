@@ -1,165 +1,393 @@
 <p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d1117,50:1a1a2e,100:16213e&height=180&section=header&text=C-Encrypt&fontSize=70&fontColor=00d4ff&animation=fadeIn&fontAlignY=38&desc=Secure%20File%20Encryption%20Platform&descAlignY=58&descSize=18&descColor=8892b0"/>
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d1117,50:1a1a2e,100:16213e&height=220&section=header&text=C-Encrypt&fontSize=72&fontColor=00d4ff&animation=fadeIn&fontAlignY=38&desc=Multi-User%20File%20Encryption%20Platform&descAlignY=58&descSize=18&descColor=8892b0"/>
 </p>
+
+<div align="center">
+
+### Secure • Offline • Multi-User • Auditable
+
+A secure terminal-based file vault built in Python that enables encrypted file storage, key management, user authentication, and administrative monitoring.
+
+<br>
+
+<img src="https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
+<img src="https://img.shields.io/badge/Encryption-Fernet_AES_128-00d4ff?style=for-the-badge"/>
+<img src="https://img.shields.io/badge/Auth-PBKDF2_HMAC_SHA256-success?style=for-the-badge"/>
+<img src="https://img.shields.io/badge/Platform-Windows-0078D6?style=for-the-badge&logo=windows"/>
+<img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge"/>
+
+</div>
+
+---
+
+## Preview
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Encryption-AES%20128%20Fernet-00d4ff?style=for-the-badge&logo=lock&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Auth-PBKDF2--HMAC--SHA256-success?style=for-the-badge"/>
-  <img src="https://img.shields.io/badge/Platform-Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white"/>
-  <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge"/>
+  <img src="logo.png" width="180"/>
 </p>
 
-<p align="center">
-  <b>A terminal-based multi-user encrypted file vault with AES encryption, key sharing, and an admin control panel.</b>
-</p>
+> Replace the image above with a terminal screenshot or GIF demonstration.
+>
+> A 15-second demo GIF will increase engagement more than any README section.
 
 ---
 
-## What is C-Encrypt?
+# Why C-Encrypt?
 
-C-Encrypt is a command-line file encryption platform where users can securely upload, encrypt, and share files — all from the terminal. It supports multiple accounts with role-based access (User / Admin), stores files encrypted with Fernet AES-128-CBC, and manages encryption keys separately so your data is never readable without the right key.
+Most beginner encryption projects stop at:
 
-Built in Python. Runs entirely offline. No cloud dependency.
+- Encrypt File
+- Decrypt File
+
+C-Encrypt goes beyond that.
+
+It simulates a complete secure file management system with authentication, key isolation, integrity verification, audit logging, role-based permissions, and administrative controls.
+
+Designed as a Python mini-project while following real-world security principles.
 
 ---
 
-## Features
+# Core Features
 
+<table>
+<tr>
+<td width="50%">
+
+### User Features
+
+- Encrypt any file
+- Decrypt using matching key
+- Secure key sharing
+- Key backup system
+- File integrity verification
+- Password management
+- Personal activity logs
+- Account deletion
+
+</td>
+<td width="50%">
+
+### Admin Features
+
+- User management
+- Force password resets
+- View audit logs
+- Export logs
+- Maintenance mode
+- Remove inactive users
+- System statistics
+- Delete user accounts
+
+</td>
+</tr>
+</table>
+
+---
+
+# Security Architecture
+
+<table>
+<tr>
+<th>Layer</th>
+<th>Implementation</th>
+</tr>
+
+<tr>
+<td>Password Protection</td>
+<td>PBKDF2-HMAC-SHA256 (100,000 iterations)</td>
+</tr>
+
+<tr>
+<td>File Encryption</td>
+<td>Fernet AES-128 Encryption</td>
+</tr>
+
+<tr>
+<td>Integrity Verification</td>
+<td>SHA256 Checksums</td>
+</tr>
+
+<tr>
+<td>Key Storage</td>
+<td>Separated From Encrypted Files</td>
+</tr>
+
+<tr>
+<td>Audit Trail</td>
+<td>Timestamped Activity Logging</td>
+</tr>
+
+<tr>
+<td>Password Migration</td>
+<td>Automatic Legacy SHA256 Upgrade</td>
+</tr>
+
+</table>
+
+### Security Highlights
+
+```text
+✓ No plaintext passwords
+✓ Unique encryption key per file
+✓ Integrity validation on download
+✓ Separated key storage
+✓ Full activity tracking
+✓ Offline operation
 ```
-User Features                        Admin Features
-─────────────────────────────        ──────────────────────────────
-✦ Encrypt & upload any file          ✦ View and manage all users
-✦ Decrypt & download with key        ✦ Force password resets
-✦ Share encryption keys with users   ✦ View full system activity logs
-✦ File integrity verification        ✦ Export and clear logs
-✦ Backup all your keys               ✦ Orphaned file cleanup
-✦ View recent activity log           ✦ System statistics overview
-✦ Change password anytime            ✦ Toggle maintenance mode
-✦ Delete account & all data          ✦ Delete any user account
+
+---
+
+# System Workflow
+
+```text
+                USER
+                  │
+                  ▼
+
+        Authentication Layer
+                  │
+                  ▼
+
+         Encryption Engine
+                  │
+      ┌───────────┼───────────┐
+      │           │           │
+      ▼           ▼           ▼
+
+ Encrypted     Metadata      Keys
+   Files       Storage      Storage
+
+      │
+      ▼
+
+ Activity Logger
 ```
 
 ---
 
-## Security
+# Encryption Process
 
-| Layer | Method |
-|---|---|
-| Password hashing | PBKDF2-HMAC-SHA256 · 100,000 iterations |
-| File encryption | Fernet (AES-128-CBC + HMAC-SHA256) |
-| Legacy migration | SHA256 passwords auto-upgraded on login |
-| File integrity | SHA256 checksums verified on every download |
-| Key isolation | Encryption keys stored separately from files |
-| Audit trail | Timestamped log of every user action |
+```text
+UPLOAD
 
-No passwords stored in plaintext. Ever.
+File
+ │
+ ▼
+
+Generate Key
+ │
+ ▼
+
+Encrypt File
+ │
+ ▼
+
+Store .enc File
+ │
+ ▼
+
+Store Key
+ │
+ ▼
+
+Generate SHA256
+ │
+ ▼
+
+Log Activity
+```
+
+```text
+DOWNLOAD
+
+Encrypted File
+ │
+ ▼
+
+Select Key
+ │
+ ▼
+
+Decrypt
+ │
+ ▼
+
+Verify SHA256
+ │
+ ▼
+
+Restore File
+ │
+ ▼
+
+Log Activity
+```
 
 ---
 
-## Installation
+# Project Statistics
 
-**Requirements:** Python 3.8+ · Windows
+| Metric | Value |
+|----------|----------|
+| Language | Python |
+| Interface | Terminal / CLI |
+| Authentication | Multi-User |
+| Authorization | Role-Based |
+| Encryption | Fernet AES |
+| Integrity | SHA256 |
+| Storage | Local |
+| Logging | Audit Trail |
+| Platform | Windows |
+
+---
+
+# Installation
+
+### Requirements
+
+```text
+Python 3.8+
+Windows
+```
+
+### Clone Repository
 
 ```bash
-# 1. Clone the repository
 git clone https://github.com/Superduash/C-Encrypt.git
 cd C-Encrypt
+```
 
-# 2. Install dependencies
+### Install Dependencies
+
+```bash
 pip install -r requirements.txt
+```
 
-# 3. Launch
+### Run Application
+
+```bash
 python main.py
 ```
 
-**Or on Windows — just double-click `start.bat`**
-It auto-checks Python, installs dependencies silently, and launches the app.
+### Windows Users
+
+Simply launch:
+
+```text
+start.bat
+```
+
+The launcher automatically:
+
+- Checks Python installation
+- Installs dependencies
+- Starts the application
 
 ---
 
-## Getting Started
+# Quick Start
 
-**Default admin credentials (change immediately after first login)**
+### Default Administrator Account
+
+```text
+Username : Admin
+Password : admin
 ```
-Username: Admin
-Password: admin
-```
 
-**Password requirements for new accounts**
-- Minimum 8 characters
-- At least one uppercase letter
-- At least one number
+Change the password immediately after first login.
 
----
+### Password Rules
 
-## How It Works
-
-```
-Upload Flow                          Download Flow
-────────────────────────             ────────────────────────
-User provides file path              User selects encrypted file
-        ↓                                    ↓
-Fernet generates unique key          User selects matching key
-        ↓                                    ↓
-File encrypted → .enc stored         Fernet decrypts the file
-        ↓                                    ↓
-Key saved to /keys/                  SHA256 integrity verified
-        ↓                                    ↓
-SHA256 hash logged in metadata       File saved to /decrypted/
+```text
+Minimum 8 characters
+At least 1 uppercase letter
+At least 1 number
 ```
 
 ---
 
-## Directory Structure
+# Project Structure
 
-```
-C-Encrypt/
-├── main.py               ← Core application
-├── start.bat             ← One-click Windows launcher
+```text
+C-Encrypt
+│
+├── main.py
+├── start.bat
 ├── requirements.txt
-└── cstorage/
-    ├── encrypted/        ← Encrypted .enc files
-    ├── keys/             ← Per-file .key files
-    ├── decrypted/        ← Output after decryption
-    ├── backups/          ← Key and log backups
-    ├── users.txt         ← Hashed user credentials
-    ├── logs.txt          ← Full activity audit trail
-    └── metadata.json     ← File metadata and checksums
+│
+└── cstorage
+    │
+    ├── encrypted
+    ├── keys
+    ├── decrypted
+    ├── backups
+    ├── users.txt
+    ├── logs.txt
+    └── metadata.json
 ```
 
 ---
 
-## Tech Stack
+# Technology Stack
 
-<p>
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" width="40" height="40" alt="Python"/>
-  &nbsp;
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/windows8/windows8-original.svg" width="40" height="40" alt="Windows"/>
-</p>
+<div align="center">
 
-| Package | Purpose |
-|---|---|
-| `cryptography` | Fernet AES-128-CBC encryption and key generation |
-| `colorama` | Cross-platform colored terminal output |
-| `hashlib` | PBKDF2-HMAC-SHA256 password hashing + SHA256 integrity |
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" width="60"/>
+&nbsp;&nbsp;&nbsp;
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/windows8/windows8-original.svg" width="60"/>
 
----
+</div>
 
-## Limitations
-
-- Max file size: **50 MB** (prevents RAM exhaustion during Fernet encryption)
-- Local storage only — files are stored on the same machine
-- Terminal-only interface (no GUI)
-- Windows-native launcher (`.bat`); runs on Linux/Mac via `python main.py`
+| Library | Purpose |
+|----------|----------|
+| cryptography | File encryption and key generation |
+| hashlib | Password hashing and integrity verification |
+| colorama | Colored terminal interface |
 
 ---
 
-## License
+# Future Improvements
 
-MIT — free to use, modify, and distribute.
+- [ ] GUI Version
+- [ ] Linux Installer
+- [ ] Docker Deployment
+- [ ] Multi-Factor Authentication
+- [ ] Secure Database Storage
+- [ ] Encrypted Cloud Backup
+- [ ] File Versioning
+- [ ] REST API Support
 
 ---
+
+# Educational Objectives
+
+This project demonstrates:
+
+- Applied Cryptography
+- Authentication Systems
+- Role-Based Access Control
+- Secure File Management
+- Audit Logging
+- Python Application Architecture
+
+---
+
+# License
+
+Distributed under the MIT License.
+
+Feel free to use, modify, and distribute.
+
+---
+
+<div align="center">
+
+### Built with Python and Security Principles
+
+If you found this project useful, consider giving it a ⭐
+
+</div>
 
 <p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:16213e,50:1a1a2e,100:0d1117&height=100&section=footer"/>
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:16213e,50:1a1a2e,100:0d1117&height=120&section=footer"/>
 </p>
