@@ -26,9 +26,8 @@ A terminal-based file encryption platform built in Python that allows users to s
 
 ### Admin Panel
 
-<p align="center">
-  <img src="./adminpanel.png" width="900" alt="Admin Panel"/>
-</p>
+<img width="625" height="354" alt="adminpanel" src="https://github.com/user-attachments/assets/42c2ea0f-0a64-441f-a988-075e1acda4ac" />
+
 ---
 
 ## ✨ Features
