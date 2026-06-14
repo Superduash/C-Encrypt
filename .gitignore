@@ -3,45 +3,35 @@ __pycache__/
 *.py[cod]
 *.so
 *.egg-info/
-dist/
-build/
 .Python
 env/
 venv/
 .venv/
 
 # PyInstaller
+dist/
+build/
 *.spec
-*.manifest
-*.exe
+build_exe.bat
 
 # C-Encrypt user data (never commit)
 cstorage/
-*.enc
-*.key
-*.log
-maintenance.flag
 
-# Sample / test files
+# Test files
+test_*.py
 sample.*
-test_*
-test_app.py
-test_align.py
-.pytest_cache/
+samples/
 
-# Dev / helper scripts
+# Dev/temporary files
 export.py
 cencrypt.txt
+CEncypt.bat
 
-# Docs / reports (local only)
+# Documentation (keep only README.md in repo)
 Prompt.md
 QUICK_START.txt
-IMPLEMENTATION_COMPLETE.md
 *.docx
 *.pdf
-
-# Old launcher
-CEncypt.bat
 
 # IDEs
 .vscode/
