@@ -22,9 +22,7 @@ A terminal-based file encryption platform built in Python that allows users to s
 
 ## 📸 Preview
 
-<p align="center">
-  <img src="./cencrypt.gif" width="900" alt="C-Encrypt Demo"/>
-</p>
+<img width="819" height="526" alt="cencrypt" src="https://github.com/user-attachments/assets/d3204044-b1b8-4bdc-b5b8-d1f8899ef29c" />
 
 ### Admin Panel
 
