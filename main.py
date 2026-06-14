@@ -11,6 +11,14 @@ from datetime import datetime
 from cryptography.fernet import Fernet, InvalidToken
 from colorama import init, Fore, Style
 
+# tkinter is built into Python — used for native file/folder dialogs
+try:
+    import tkinter as tk
+    from tkinter import filedialog
+    _TK_AVAILABLE = True
+except ImportError:
+    _TK_AVAILABLE = False
+
 # Initialize colorama for cross-platform colored terminal output
 init(autoreset=True)
 
@@ -243,7 +251,7 @@ class CEncryptLogic:
         except Exception:
             return []
 
-    def download_file(self, username, encrypted_name, key_path):
+    def download_file(self, username, encrypted_name, key_path, save_dir=None):
         if self.is_maintenance_mode():
             return "Error: System is in maintenance mode. Downloads disabled."
         try:
@@ -271,12 +279,14 @@ class CEncryptLogic:
                     return "Error: File integrity check failed. File may be corrupted."
                     
             decrypted_data = cipher.decrypt(encrypted_data)
-            decrypted_path = os.path.join(self.DECRYPTED_DIR, original_name)
+            # Use custom save_dir if provided, otherwise default to decrypted folder
+            out_dir = save_dir if save_dir and os.path.isdir(save_dir) else self.DECRYPTED_DIR
+            decrypted_path = os.path.join(out_dir, original_name)
             with open(decrypted_path, 'wb') as f:
                 f.write(decrypted_data)
                 
             self._log_action(username, "DOWNLOAD", f"File: {original_name}")
-            return f"Success! File saved to 'decrypted' folder as '{original_name}'."
+            return f"Success! File saved to '{decrypted_path}'."
         except InvalidToken:
             self._log_action(username, "DOWNLOAD_FAIL", f"Invalid key for {encrypted_name}")
             return "Error: Wrong key. Decryption failed."
@@ -847,6 +857,36 @@ class ConsoleApp:
             return text[1:-1]
         return text
 
+    def _pick_file(self, title="Select a file", filetypes=None):
+        """Open a native file picker dialog. Returns path or None."""
+        if not _TK_AVAILABLE:
+            return None
+        try:
+            root = tk.Tk()
+            root.withdraw()          # hide the empty root window
+            root.attributes('-topmost', True)
+            if filetypes is None:
+                filetypes = [("All files", "*.*")]
+            path = filedialog.askopenfilename(title=title, filetypes=filetypes)
+            root.destroy()
+            return path if path else None
+        except Exception:
+            return None
+
+    def _pick_folder(self, title="Select save folder"):
+        """Open a native folder picker dialog. Returns path or None."""
+        if not _TK_AVAILABLE:
+            return None
+        try:
+            root = tk.Tk()
+            root.withdraw()
+            root.attributes('-topmost', True)
+            path = filedialog.askdirectory(title=title)
+            root.destroy()
+            return path if path else None
+        except Exception:
+            return None
+
     def safe_password(self, prompt="Password: "):
         try:
             with warnings.catch_warnings():
@@ -1139,11 +1179,26 @@ class ConsoleApp:
             print(f"\n{Fore.RED}Uploads are currently disabled during maintenance.{Style.RESET_ALL}")
             self.pause()
             return
-        print(f"\n{Fore.YELLOW}Enter the file path (with or without quotes){Style.RESET_ALL}")
-        file_path = self.safe_input("File Path: ")
+
+        file_path = None
+
+        if _TK_AVAILABLE:
+            print(f"\n{Fore.YELLOW}A file picker window will open — select the file you want to encrypt.{Style.RESET_ALL}")
+            print(f"  {Fore.CYAN}(Close the dialog or press Cancel to type a path manually){Style.RESET_ALL}\n")
+            input(f"  {Fore.WHITE}Press Enter to open file picker...{Style.RESET_ALL}")
+            file_path = self._pick_file(title="Select file to encrypt and upload")
+            if file_path:
+                print(f"\n  {Fore.GREEN}Selected:{Style.RESET_ALL} {file_path}")
+            else:
+                print(f"\n  {Fore.YELLOW}No file selected via dialog. Enter path manually.{Style.RESET_ALL}")
+
         if not file_path:
-            return
-        file_path = self.strip_quotes(file_path)
+            print(f"\n{Fore.YELLOW}Enter the file path (with or without quotes){Style.RESET_ALL}")
+            file_path = self.safe_input("File Path: ")
+            if not file_path:
+                return
+            file_path = self.strip_quotes(file_path)
+
         self._show_progress_bar("Encrypting and uploading file...", 1.5)
         result = self.logic.upload_file(self.current_user, file_path)
         self._display_result(result)
@@ -1232,10 +1287,22 @@ class ConsoleApp:
         key_idx = self._select_from_list(keys, "key")
         if key_idx is None:
             return
-            
+
+        # Ask where to save
+        save_dir = None
+        if _TK_AVAILABLE:
+            print(f"\n{Fore.YELLOW}A folder picker will open — choose where to save the decrypted file.{Style.RESET_ALL}")
+            print(f"  {Fore.CYAN}(Cancel to save to default cstorage/decrypted/ folder){Style.RESET_ALL}\n")
+            input(f"  {Fore.WHITE}Press Enter to open folder picker...{Style.RESET_ALL}")
+            save_dir = self._pick_folder(title="Choose folder to save decrypted file")
+            if save_dir:
+                print(f"\n  {Fore.GREEN}Save to:{Style.RESET_ALL} {save_dir}")
+            else:
+                print(f"\n  {Fore.YELLOW}No folder selected. Saving to default decrypted folder.{Style.RESET_ALL}")
+
         self._show_progress_bar("Downloading and decrypting file...", 1.5)
         key_path = os.path.join(self.logic.KEYS_DIR, keys[key_idx])
-        result = self.logic.download_file(self.current_user, files[file_idx], key_path)
+        result = self.logic.download_file(self.current_user, files[file_idx], key_path, save_dir=save_dir)
         self._display_result(result)
         self.pause()
 
