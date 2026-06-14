@@ -10,7 +10,7 @@ A terminal-based file encryption platform built in Python that allows users to s
 
 <br>
 
-<img src="https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
+<img src="https://img.shields.io/badge/Python-3.12+-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
 <img src="https://img.shields.io/badge/Fernet-AES_Encryption-00d4ff?style=for-the-badge"/>
 <img src="https://img.shields.io/badge/Auth-PBKDF2--HMAC--SHA256-success?style=for-the-badge"/>
 <img src="https://img.shields.io/badge/Platform-Windows-0078D6?style=for-the-badge&logo=windows"/>
@@ -109,6 +109,14 @@ start.bat
 
 Automatically installs dependencies and launches the application.
 
+(or)
+
+Download the latest executable from the Releases page and run:
+
+C-Encrypt.exe
+
+No Python installation required.
+
 ---
 
 ## 📂 Project Structure
@@ -118,6 +126,7 @@ C-Encrypt
 ├── main.py
 ├── start.bat
 ├── requirements.txt
+├── README.md
 └── cstorage/
 ```
 
