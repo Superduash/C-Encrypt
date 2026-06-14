@@ -10,6 +10,11 @@ env/
 venv/
 .venv/
 
+# PyInstaller
+*.spec
+*.manifest
+*.exe
+
 # C-Encrypt user data (never commit)
 cstorage/
 *.enc
@@ -21,6 +26,7 @@ maintenance.flag
 sample.*
 test_*
 test_app.py
+test_align.py
 .pytest_cache/
 
 # Dev / helper scripts

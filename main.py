@@ -24,7 +24,14 @@ init(autoreset=True)
 
 class CEncryptLogic:
     def __init__(self):
-        self.BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+        # PyInstaller compatibility: use executable directory when frozen, script directory otherwise
+        if getattr(sys, 'frozen', False):
+            # Running as compiled executable
+            self.BASE_DIR = os.path.dirname(sys.executable)
+        else:
+            # Running as normal Python script
+            self.BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+        
         self.CSTORAGE_DIR = os.path.join(self.BASE_DIR, 'cstorage')
         self.ENCRYPTED_DIR = os.path.join(self.CSTORAGE_DIR, 'encrypted')
         self.KEYS_DIR = os.path.join(self.CSTORAGE_DIR, 'keys')
