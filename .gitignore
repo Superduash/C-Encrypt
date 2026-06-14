@@ -1,25 +1,41 @@
 # Python
 __pycache__/
 *.py[cod]
-*$py.class
 *.so
+*.egg-info/
+dist/
+build/
 .Python
 env/
 venv/
 .venv/
 
-# C-Encrypt Specific (NEVER commit user data or keys)
+# C-Encrypt user data (never commit)
 cstorage/
 *.enc
 *.key
 *.log
 maintenance.flag
 
-# Testing & Samples
-test_app.py
-sample_*
+# Sample / test files
+sample.*
 test_*
+test_app.py
 .pytest_cache/
+
+# Dev / helper scripts
+export.py
+cencrypt.txt
+
+# Docs / reports (local only)
+Prompt.md
+QUICK_START.txt
+IMPLEMENTATION_COMPLETE.md
+*.docx
+*.pdf
+
+# Old launcher
+CEncypt.bat
 
 # IDEs
 .vscode/
@@ -30,8 +46,3 @@ test_*
 # OS
 .DS_Store
 Thumbs.db
-
-# Documentation (keep in repo)
-!README.md
-!QUICK_START.txt
-!IMPLEMENTATION_COMPLETE.md
