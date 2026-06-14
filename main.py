@@ -105,16 +105,36 @@ class CEncryptLogic:
         return (True, []) if not errors else (False, errors)
 
     def register_user(self, username, password):
-        if not username or not password:
-            return "Username and password cannot be empty."
-        if ' ' in username or ':' in username:
-            return "Username cannot contain spaces or colons."
+        if not username:
+            return "Username cannot be empty."
+        if not password:
+            return "Password cannot be empty."
+        if len(username) < 3:
+            return "Username must be at least 3 characters long."
+        if len(username) > 32:
+            return "Username must be 32 characters or less."
+        if ' ' in username:
+            return "Username cannot contain spaces."
+        if ':' in username:
+            return "Username cannot contain colons."
+        if not re.match(r'^[a-zA-Z0-9_\-]+$', username):
+            return "Username can only contain letters, numbers, underscores, and hyphens."
+
+        # Case-insensitive duplicate check with helpful message
+        if os.path.exists(self.USERS_FILE):
+            with open(self.USERS_FILE, 'r', encoding='utf-8') as f:
+                for line in f:
+                    existing = line.strip().split(':')[0]
+                    if existing.lower() == username.lower():
+                        if existing == username:
+                            return "Username already taken. Please choose a different one."
+                        else:
+                            return f"Username already taken (as '{existing}'). Please choose a different one."
+
         is_strong, issues = self.check_password_strength(password)
         if not is_strong:
             return "Password requirements not met:\n" + "\n".join(f"  * {issue}" for issue in issues)
-        if self._check_user_exists(username):
-            return "Username already exists."
-        
+
         hashed_password = self._hash_password_new(username, password)
         with open(self.USERS_FILE, 'a', encoding='utf-8') as f:
             f.write(f"{username}:{hashed_password}:USER:false\n")
@@ -122,20 +142,39 @@ class CEncryptLogic:
         return "Success"
 
     def login_user(self, username, password):
+        if not username or not password:
+            return False, None, "Username and password cannot be empty.", False
         if not os.path.exists(self.USERS_FILE):
-            return False, None, "No users registered", False
-        
-        user_found = False
+            return False, None, "No users registered yet.", False
+
+        # Collect all registered usernames for helpful suggestions
+        all_usernames = []
+        with open(self.USERS_FILE, 'r', encoding='utf-8') as f:
+            for line in f:
+                parts = line.strip().split(':')
+                if len(parts) >= 2 and parts[0]:
+                    all_usernames.append(parts[0])
+
+        # Check exact match
+        if username not in all_usernames:
+            # Check if it's a case mismatch
+            lower_map = {u.lower(): u for u in all_usernames}
+            if username.lower() in lower_map:
+                correct = lower_map[username.lower()]
+                self._log_action(username, "LOGIN_FAIL", "Username case mismatch")
+                return False, None, f"Username not found. Did you mean '{correct}'?", False
+            self._log_action(username, "LOGIN_FAIL", "User not found")
+            return False, None, "Username not found. Check spelling or register a new account.", False
+
+        # Exact username found — now verify password
         with open(self.USERS_FILE, 'r', encoding='utf-8') as f:
             for line in f:
                 parts = line.strip().split(':')
                 if len(parts) >= 2 and parts[0] == username:
-                    user_found = True
                     stored_hash = parts[1]
                     role = parts[2] if len(parts) > 2 else "USER"
                     reset_required = parts[3] == "true" if len(parts) > 3 else False
-                    
-                    # Check new hash first, then fallback to old hash for seamless migration
+
                     if stored_hash == self._hash_password_new(username, password):
                         self._log_action(username, "LOGIN", f"User logged in as {role}")
                         return True, role, None, reset_required
@@ -147,13 +186,9 @@ class CEncryptLogic:
                         return True, role, None, reset_required
                     else:
                         self._log_action(username, "LOGIN_FAIL", "Incorrect password")
-                        return False, None, "Incorrect password", False
-                        
-        if not user_found:
-            self._log_action(username, "LOGIN_FAIL", "User not found")
-            return False, None, "User not found", False
-            
-        return False, None, "Login failed", False
+                        return False, None, "Incorrect password.", False
+
+        return False, None, "Login failed.", False
 
     def get_all_users(self):
         try:
@@ -863,11 +898,17 @@ class ConsoleApp:
             return None
         try:
             root = tk.Tk()
-            root.withdraw()          # hide the empty root window
+            root.withdraw()
+            root.update()            # flush event queue so the dialog surfaces on top
             root.attributes('-topmost', True)
+            root.lift()
             if filetypes is None:
                 filetypes = [("All files", "*.*")]
-            path = filedialog.askopenfilename(title=title, filetypes=filetypes)
+            path = filedialog.askopenfilename(
+                parent=root,
+                title=title,
+                filetypes=filetypes
+            )
             root.destroy()
             return path if path else None
         except Exception:
@@ -880,8 +921,13 @@ class ConsoleApp:
         try:
             root = tk.Tk()
             root.withdraw()
+            root.update()
             root.attributes('-topmost', True)
-            path = filedialog.askdirectory(title=title)
+            root.lift()
+            path = filedialog.askdirectory(
+                parent=root,
+                title=title
+            )
             root.destroy()
             return path if path else None
         except Exception:
@@ -983,14 +1029,15 @@ class ConsoleApp:
         username = self.safe_input("Username: ")
         if not username:
             return
-        if not self.logic._check_user_exists(username):
-            print(f"\n{Fore.RED}[ERROR] User not found{Style.RESET_ALL}")
+
+        password = self.safe_password("Password: ")
+        if not password:
+            print(f"\n{Fore.RED}[ERROR] Password cannot be empty.{Style.RESET_ALL}")
             self.pause()
             return
-            
-        password = self.safe_password("Password: ")
+
         success, role, error_msg, reset_required = self.logic.login_user(username, password)
-        
+
         if success:
             self.current_user = username
             self.user_role = role
@@ -998,16 +1045,14 @@ class ConsoleApp:
             if role == "ADMIN":
                 print(f"  {Fore.MAGENTA}[ADMIN] Administrator access granted{Style.RESET_ALL}")
             self.pause()
-            
             if reset_required:
                 self.forced_password_reset()
-                
             if self.user_role == "ADMIN":
                 self.admin_menu()
             else:
                 self.session_menu()
         else:
-            print(f"\n{Fore.RED}[ERROR] {error_msg if error_msg else 'Invalid credentials.'}{Style.RESET_ALL}")
+            print(f"\n{Fore.RED}[ERROR] {error_msg}{Style.RESET_ALL}")
             self.pause()
 
     def forced_password_reset(self):
@@ -1183,21 +1228,30 @@ class ConsoleApp:
         file_path = None
 
         if _TK_AVAILABLE:
-            print(f"\n{Fore.YELLOW}A file picker window will open — select the file you want to encrypt.{Style.RESET_ALL}")
-            print(f"  {Fore.CYAN}(Close the dialog or press Cancel to type a path manually){Style.RESET_ALL}\n")
-            input(f"  {Fore.WHITE}Press Enter to open file picker...{Style.RESET_ALL}")
+            print(f"\n{Fore.CYAN}Opening file picker...{Style.RESET_ALL}")
             file_path = self._pick_file(title="Select file to encrypt and upload")
             if file_path:
-                print(f"\n  {Fore.GREEN}Selected:{Style.RESET_ALL} {file_path}")
+                print(f"  {Fore.GREEN}Selected:{Style.RESET_ALL} {file_path}")
             else:
-                print(f"\n  {Fore.YELLOW}No file selected via dialog. Enter path manually.{Style.RESET_ALL}")
+                print(f"  {Fore.YELLOW}No file selected. Enter path manually.{Style.RESET_ALL}")
 
         if not file_path:
-            print(f"\n{Fore.YELLOW}Enter the file path (with or without quotes){Style.RESET_ALL}")
+            print(f"\n{Fore.YELLOW}Enter the file path (drag & drop or type it):{Style.RESET_ALL}")
             file_path = self.safe_input("File Path: ")
             if not file_path:
                 return
             file_path = self.strip_quotes(file_path)
+
+        if not os.path.exists(file_path):
+            print(f"\n{Fore.RED}[ERROR] File not found: {file_path}{Style.RESET_ALL}")
+            self.pause()
+            return
+
+        file_size = os.path.getsize(file_path)
+        if file_size > self.logic.MAX_FILE_SIZE:
+            print(f"\n{Fore.RED}[ERROR] File too large ({self.logic._format_file_size(file_size)}). Max allowed is 50 MB.{Style.RESET_ALL}")
+            self.pause()
+            return
 
         self._show_progress_bar("Encrypting and uploading file...", 1.5)
         result = self.logic.upload_file(self.current_user, file_path)
