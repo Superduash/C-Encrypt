@@ -1,4 +1,4 @@
-import os
+﻿import os
 import sys
 import hashlib
 import json
@@ -806,16 +806,19 @@ class ConsoleApp:
         self.logic = CEncryptLogic()
         self.current_user = None
         self.user_role = None
-        self.main_banner = f"""
-{Fore.CYAN}==================================================================={Style.RESET_ALL}
-{Fore.CYAN} _____        ____                       __                       {Style.RESET_ALL}
-{Fore.CYAN}/ ___/ ____  / __/__  __________ _____  / /_                      {Style.RESET_ALL}
-{Fore.CYAN}/ /__  /___/ / _// _ \/ __/ __/ // / _ \/ __/                     {Style.RESET_ALL}
-{Fore.CYAN}\___/       /___/_//_/\__/_/  \_, / .__/\__/                     {Style.RESET_ALL}
-{Fore.CYAN}                    /___/_/                                     {Style.RESET_ALL}
-{Fore.GREEN}                 Secure Cloud Platform v2.0                     {Style.RESET_ALL}
-{Fore.CYAN}==================================================================={Style.RESET_ALL}
-"""
+        _art = r"""
+        ______            ______                            __ 
+       / ____/           / ____/___  ____________  ______  / /_
+      / /      ______   / __/ / __ \/ ___/ ___/ / / / __ \/ __/
+     / /___   /_____/  / /___/ / / / /__/ /  / /_/ / /_/ / /_  
+     \____/           /_____/_/ /_/\___/_/   \__, / .___/\__/  
+                                            /____/_/           """
+        self.main_banner = (
+            f"\n{Fore.CYAN}==================================================================={Style.RESET_ALL}\n"
+            f"{Fore.CYAN}{_art}{Style.RESET_ALL}\n"
+            f"\n{Fore.GREEN}                Secure File Encryption Platform v2.0             {Style.RESET_ALL}\n"
+            f"{Fore.CYAN}==================================================================={Style.RESET_ALL}\n"
+        )
 
     def clear_screen(self):
         os.system('cls' if os.name == 'nt' else 'clear')
