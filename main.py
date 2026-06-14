@@ -1418,14 +1418,14 @@ class ConsoleApp:
         # Ask where to save
         save_dir = None
         if _TK_AVAILABLE:
-            print(f"\n{Fore.YELLOW}A folder picker will open — choose where to save the decrypted file.{Style.RESET_ALL}")
-            print(f"  {Fore.CYAN}(Cancel to save to default cstorage/decrypted/ folder){Style.RESET_ALL}\n")
-            input(f"  {Fore.WHITE}Press Enter to open folder picker...{Style.RESET_ALL}")
+            print(f"\n{Fore.CYAN}Opening folder picker...{Style.RESET_ALL}")
+            print(f"  {Fore.YELLOW}(Cancel the dialog to use default cstorage/decrypted/ folder){Style.RESET_ALL}\n")
+            time.sleep(0.3)  # Brief pause so user can see the message
             save_dir = self._pick_folder(title="Choose folder to save decrypted file")
             if save_dir:
-                print(f"\n  {Fore.GREEN}Save to:{Style.RESET_ALL} {save_dir}")
+                print(f"  {Fore.GREEN}Save to:{Style.RESET_ALL} {save_dir}")
             else:
-                print(f"\n  {Fore.YELLOW}No folder selected. Saving to default decrypted folder.{Style.RESET_ALL}")
+                print(f"  {Fore.YELLOW}No folder selected. Using default decrypted folder.{Style.RESET_ALL}")
 
         self._show_progress_bar("Downloading and decrypting file...", 1.5)
         key_path = os.path.join(self.logic.KEYS_DIR, keys[key_idx])
