@@ -23,13 +23,13 @@ A terminal-based file encryption platform built in Python that allows users to s
 ## 📸 Preview
 
 <p align="center">
-  <img src="assets/cencrypt.gif" width="900"/>
+  <img src="./cencrypt.gif" width="900" alt="C-Encrypt Demo"/>
 </p>
 
 ### Admin Panel
 
 <p align="center">
-  <img src="assets/adminpanel.png" width="900"/>
+  <img src="./adminpanel.png" width="900" alt="Admin Panel"/>
 </p>
 ---
 
