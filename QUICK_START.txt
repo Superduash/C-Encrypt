@@ -1,0 +1,135 @@
+========================================
+  C-ENCRYPT SECURE CLOUD PLATFORM V2.0
+========================================
+
+QUICK START GUIDE
+=================
+
+1. LAUNCH THE APPLICATION
+   - Double-click: start.bat
+   - Or run: python main.py
+
+2. DEFAULT ADMIN CREDENTIALS
+   Username: Admin
+   Password: admin
+   
+   ⚠️ Change admin password immediately after first login!
+
+3. NEW USER REGISTRATION
+   - Select option [2] from main menu
+   - Password requirements:
+     * Minimum 8 characters
+     * At least one uppercase letter
+     * At least one number
+   
+4. MAIN FEATURES
+   
+   USER OPERATIONS:
+   [1] Upload File           - Encrypt and upload (max 50 MB)
+   [2] Download File         - Decrypt and save to cstorage/decrypted/
+   [3] List My Files         - View your encrypted files
+   [4] File Info             - View metadata (size, date, integrity)
+   [5] Share a Key           - Share access with another user
+   [6] Delete a File         - Remove file and key permanently
+   [7] List My Keys          - View all your encryption keys
+   [8] Delete a Key          - Remove a key (file becomes inaccessible)
+   [9] Backup Keys           - Export keys to cstorage/backups/
+   [10] Change Password      - Update your password
+   [11] Recent Activity      - View your last 5 actions
+   [12] Logout               - Exit to main menu
+
+   DANGER ZONE:
+   [13] Delete All My Data   - Removes all files/keys/backups
+   [14] Delete My Account    - Permanently removes account + all data
+
+   ADMIN OPERATIONS:
+   • View/manage all users
+   • Delete user accounts
+   • Force password resets
+   • View system logs
+   • Export/clear logs
+   • System statistics
+   • Orphaned file cleanup
+   • Maintenance mode toggle
+
+5. FILE OPERATIONS
+
+   UPLOADING:
+   - Enter full path or drag-and-drop file
+   - Paths can be with or without quotes
+   - Max file size: 50 MB
+   - Files are encrypted with Fernet (AES-128)
+   - SHA256 hash stored for integrity checking
+   
+   DOWNLOADING:
+   - Select encrypted file
+   - Select corresponding key
+   - Decrypted file saved to: cstorage/decrypted/
+   
+   SHARING:
+   - Select a key to share
+   - Enter target username
+   - Target user can now decrypt your file with their copy of the key
+
+6. SECURITY FEATURES
+
+   ✓ PBKDF2-HMAC-SHA256 password hashing (100,000 iterations)
+   ✓ Automatic legacy SHA256 migration on login
+   ✓ File integrity verification with SHA256 checksums
+   ✓ Fernet encryption (AES-128-CBC + HMAC)
+   ✓ Activity logging with timestamps
+   ✓ Secure key storage (separate from encrypted files)
+
+7. DIRECTORY STRUCTURE
+
+   cstorage/
+   ├── encrypted/   - Your encrypted files (.enc)
+   ├── keys/        - Encryption keys (.key)
+   ├── decrypted/   - Downloaded files appear here
+   ├── backups/     - Key/log/metadata backups
+   ├── users.txt    - User database
+   ├── logs.txt     - Activity logs
+   └── metadata.json - File metadata
+
+8. TROUBLESHOOTING
+
+   Problem: "Python is not installed"
+   Solution: Install Python from python.org and check "Add to PATH"
+
+   Problem: Module not found errors
+   Solution: Run: pip install -r requirements.txt
+
+   Problem: File path errors
+   Solution: Use forward slashes or escape backslashes
+             Example: C:/Users/file.txt or C:\\Users\\file.txt
+
+   Problem: Can't decrypt file
+   Solution: Ensure you have the correct key for that specific file
+             Keys are matched by filename pattern
+
+   Problem: Upload fails
+   Solution: Check file exists and is under 50 MB
+
+9. BEST PRACTICES
+
+   ✓ Backup your keys regularly (option [9])
+   ✓ Use strong passwords (8+ chars, uppercase, numbers)
+   ✓ Don't share keys with untrusted users
+   ✓ Monitor recent activity for suspicious actions
+   ✓ Export logs periodically (Admin panel)
+   ✓ Run cleanup utility monthly (Admin panel)
+
+10. TIPS
+
+    • Duplicate filenames get auto-numbered: file.txt, file (1).txt
+    • Shared files show (shared) tag in listings
+    • Progress bars show during encryption/decryption
+    • File integrity is automatically verified on download
+    • Maintenance mode blocks uploads/downloads (Admin only)
+    • Delete operations require confirmation
+    • Legacy users (SHA256) are auto-upgraded to PBKDF2
+
+========================================
+For support or questions, check the logs:
+cstorage/logs.txt
+========================================

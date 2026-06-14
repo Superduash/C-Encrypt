@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+
+# C-Encrypt Specific (NEVER commit user data or keys)
+cstorage/
+*.enc
+*.key
+*.log
+maintenance.flag
+
+# Testing & Samples
+test_app.py
+sample_*
+test_*
+.pytest_cache/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documentation (keep in repo)
+!README.md
+!QUICK_START.txt
+!IMPLEMENTATION_COMPLETE.md
