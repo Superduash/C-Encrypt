@@ -1102,13 +1102,25 @@ class ConsoleApp:
             self.clear_screen()
             print(self.main_banner)
             self.print_header(f"USER DASHBOARD - {self.current_user}")
-            print(f"\n{Fore.CYAN}FILE OPERATIONS              ACCOUNT & SECURITY           DANGER!{Style.RESET_ALL}")
-            print(f"  {Fore.GREEN}[1]{Style.RESET_ALL} Upload File               {Fore.GREEN}[7]{Style.RESET_ALL} List My Keys            {Fore.RED}[13]{Style.RESET_ALL} Delete All My Data")
-            print(f"  {Fore.GREEN}[2]{Style.RESET_ALL} Download File             {Fore.GREEN}[8]{Style.RESET_ALL} Delete a Key            {Fore.RED}[14]{Style.RESET_ALL} Delete My Account")
-            print(f"  {Fore.GREEN}[3]{Style.RESET_ALL} List My Files             {Fore.GREEN}[9]{Style.RESET_ALL} Backup Keys")
-            print(f"  {Fore.GREEN}[4]{Style.RESET_ALL} File Info                {Fore.GREEN}[10]{Style.RESET_ALL} Change Password")
-            print(f"  {Fore.GREEN}[5]{Style.RESET_ALL} Share a Key              {Fore.GREEN}[11]{Style.RESET_ALL} Recent Activity")
-            print(f"  {Fore.GREEN}[6]{Style.RESET_ALL} Delete a File            {Fore.RED}[12]{Style.RESET_ALL} Logout\n")
+            L = 42  # fixed left column width
+            print()
+            # ── Section headers ──────────────────────────────────────────
+            lh = f"{Fore.CYAN}  FILE OPERATIONS{Style.RESET_ALL}"
+            mh = f"{Fore.CYAN}ACCOUNT & SECURITY{Style.RESET_ALL}"
+            rh = f"{Fore.RED}DANGER ZONE{Style.RESET_ALL}"
+            print(f"{lh:<{L + 14}}{mh:<{L - 6}}{rh}")
+            # ── Menu rows ─────────────────────────────────────────────────
+            rows = [
+                (f"  {Fore.GREEN}[1]{Style.RESET_ALL} Upload File", f"{Fore.GREEN}[7]{Style.RESET_ALL}  List My Keys", f"{Fore.RED}[13]{Style.RESET_ALL} Delete All My Data"),
+                (f"  {Fore.GREEN}[2]{Style.RESET_ALL} Download File", f"{Fore.GREEN}[8]{Style.RESET_ALL}  Delete a Key", f"{Fore.RED}[14]{Style.RESET_ALL} Delete My Account"),
+                (f"  {Fore.GREEN}[3]{Style.RESET_ALL} List My Files", f"{Fore.GREEN}[9]{Style.RESET_ALL}  Backup Keys", ""),
+                (f"  {Fore.GREEN}[4]{Style.RESET_ALL} File Info", f"{Fore.GREEN}[10]{Style.RESET_ALL} Change Password", ""),
+                (f"  {Fore.GREEN}[5]{Style.RESET_ALL} Share a Key", f"{Fore.GREEN}[11]{Style.RESET_ALL} Recent Activity", ""),
+                (f"  {Fore.GREEN}[6]{Style.RESET_ALL} Delete a File", f"{Fore.RED}[12]{Style.RESET_ALL} Logout", ""),
+            ]
+            for l, m, r in rows:
+                print(f"{l:<{L + 9}}{m:<{L - 10}}{r}")
+            print()
             
             choice = self.safe_input("Select option: ")
             if choice == '1':
@@ -1152,17 +1164,47 @@ class ConsoleApp:
         while True:
             self.clear_screen()
             self.print_header(f"ADMIN PANEL - {self.current_user}")
-            print(f"\n{Fore.CYAN}USER MANAGEMENT                FILE & LOG MANAGEMENT{Style.RESET_ALL}")
-            print(f"  {Fore.GREEN}[1]{Style.RESET_ALL} View All Users              {Fore.GREEN}[5]{Style.RESET_ALL} Delete Any File")
-            print(f"  {Fore.GREEN}[2]{Style.RESET_ALL} Delete User Account         {Fore.GREEN}[6]{Style.RESET_ALL} View All Logs")
-            print(f"  {Fore.GREEN}[3]{Style.RESET_ALL} Force Password Reset        {Fore.GREEN}[7]{Style.RESET_ALL} Export Logs")
-            print(f"  {Fore.GREEN}[4]{Style.RESET_ALL} View All Files              {Fore.GREEN}[8]{Style.RESET_ALL} Clear All Logs")
-            print(f"                            {Fore.GREEN}[9]{Style.RESET_ALL} Clear All Backups")
-            print(f"                            {Fore.RED}[10]{Style.RESET_ALL} Delete All Files & Keys")
-            print(f"\n{Fore.CYAN}SYSTEM ADMINISTRATION{Style.RESET_ALL}")
-            print(f"  {Fore.GREEN}[11]{Style.RESET_ALL} System Statistics         {Fore.GREEN}[14]{Style.RESET_ALL} System Cleanup Utility")
-            print(f"  {Fore.GREEN}[12]{Style.RESET_ALL} User Activity Summary     {Fore.GREEN}[15]{Style.RESET_ALL} Maintenance Mode")
-            print(f"  {Fore.GREEN}[13]{Style.RESET_ALL} Export Metadata           {Fore.RED}[16]{Style.RESET_ALL} Logout\n")
+            L = 42  # fixed left column width (visible chars)
+            print()
+            # ── Section headers ──────────────────────────────────────────
+            lh = f"{Fore.CYAN}  USER MANAGEMENT{Style.RESET_ALL}"
+            rh = f"{Fore.CYAN}FILE & LOG MANAGEMENT{Style.RESET_ALL}"
+            print(f"{lh:<{L + 14}}{rh}")
+            # ── Rows 1-4 paired with 5-8 ─────────────────────────────────
+            rows_left  = [
+                f"  {Fore.GREEN}[1]{Style.RESET_ALL} View All Users",
+                f"  {Fore.GREEN}[2]{Style.RESET_ALL} Delete User Account",
+                f"  {Fore.GREEN}[3]{Style.RESET_ALL} Force Password Reset",
+                f"  {Fore.GREEN}[4]{Style.RESET_ALL} View All Files",
+                f"  {Fore.GREEN}[5]{Style.RESET_ALL} Reset User Password",
+            ]
+            rows_right = [
+                f"{Fore.GREEN}[6]{Style.RESET_ALL}  Delete Any File",
+                f"{Fore.GREEN}[7]{Style.RESET_ALL}  View All Logs",
+                f"{Fore.GREEN}[8]{Style.RESET_ALL}  Export Logs",
+                f"{Fore.GREEN}[9]{Style.RESET_ALL}  Clear All Logs",
+                f"{Fore.GREEN}[10]{Style.RESET_ALL} Clear All Backups",
+            ]
+            for l, r in zip(rows_left, rows_right):
+                # pad left col to fixed visible width (ANSI codes add ~9 invisible chars per colored token)
+                print(f"{l:<{L + 9}}{r}")
+            print(f"  {' ' * (L - 4)}{Fore.RED}[11]{Style.RESET_ALL} Delete All Files & Keys")
+            print()
+            # ── System Administration ─────────────────────────────────────
+            print(f"{Fore.CYAN}  SYSTEM ADMINISTRATION{Style.RESET_ALL}")
+            sa_left  = [
+                f"  {Fore.GREEN}[12]{Style.RESET_ALL} System Statistics",
+                f"  {Fore.GREEN}[13]{Style.RESET_ALL} User Activity Summary",
+                f"  {Fore.GREEN}[14]{Style.RESET_ALL} Export Metadata",
+            ]
+            sa_right = [
+                f"{Fore.GREEN}[15]{Style.RESET_ALL} System Cleanup Utility",
+                f"{Fore.GREEN}[16]{Style.RESET_ALL} Maintenance Mode",
+                f"{Fore.RED}[17]{Style.RESET_ALL} Logout",
+            ]
+            for l, r in zip(sa_left, sa_right):
+                print(f"{l:<{L + 10}}{r}")
+            print()
             
             choice = self.safe_input("Select option: ")
             if choice == '1':
@@ -1174,28 +1216,30 @@ class ConsoleApp:
             elif choice == '4':
                 self.view_all_files()
             elif choice == '5':
-                self.admin_delete_file_flow()
+                self.force_reset_flow()
             elif choice == '6':
-                self.logs_flow()
+                self.admin_delete_file_flow()
             elif choice == '7':
-                self.export_logs_flow()
+                self.logs_flow()
             elif choice == '8':
-                self.clear_logs_flow()
+                self.export_logs_flow()
             elif choice == '9':
-                self.clear_backups_flow()
+                self.clear_logs_flow()
             elif choice == '10':
-                self.delete_all_files_and_keys_flow()
+                self.clear_backups_flow()
             elif choice == '11':
-                self.system_stats()
+                self.delete_all_files_and_keys_flow()
             elif choice == '12':
-                self.user_activity_summary_flow()
+                self.system_stats()
             elif choice == '13':
-                self.export_metadata_flow()
+                self.user_activity_summary_flow()
             elif choice == '14':
-                self.cleanup_utility_flow()
+                self.export_metadata_flow()
             elif choice == '15':
-                self.maintenance_mode_flow()
+                self.cleanup_utility_flow()
             elif choice == '16':
+                self.maintenance_mode_flow()
+            elif choice == '17':
                 self.logic._log_action(self.current_user, "LOGOUT", "Admin logged out")
                 self.current_user = None
                 self.user_role = None
