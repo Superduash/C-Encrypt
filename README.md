@@ -23,11 +23,14 @@ A terminal-based file encryption platform built in Python that allows users to s
 ## 📸 Preview
 
 <p align="center">
-  <img src="assets/demo.gif" width="900"/>
+  <img src="assets/cencrypt.gif" width="900"/>
 </p>
 
-> Replace with a terminal demo GIF or screenshots.
+### Admin Panel
 
+<p align="center">
+  <img src="assets/adminpanel.png" width="900"/>
+</p>
 ---
 
 ## ✨ Features
