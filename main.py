@@ -865,6 +865,16 @@ class ConsoleApp:
             f"{Fore.CYAN}==================================================================={Style.RESET_ALL}\n"
         )
 
+    def _strip_ansi(self, text):
+        """Remove ANSI color codes to calculate true visible length."""
+        import re
+        ansi_escape = re.compile(r'\x1b\[[0-9;]*m')
+        return ansi_escape.sub('', text)
+    
+    def _visible_len(self, text):
+        """Get visible length of text without ANSI codes."""
+        return len(self._strip_ansi(text))
+
     def clear_screen(self):
         os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -872,8 +882,10 @@ class ConsoleApp:
         input(f"\n{Fore.YELLOW}[Press Enter to continue...]{Style.RESET_ALL}")
 
     def print_header(self, title):
+        """Print a header with proper underline that matches title length."""
+        visible_title = self._strip_ansi(title) if any(c in title for c in ['\x1b', '[']) else title
         print(f"\n{Fore.CYAN}{title}{Style.RESET_ALL}")
-        print(f"{Fore.CYAN}  {'-' * len(title)}{Style.RESET_ALL}")
+        print(f"{Fore.CYAN}{'─' * len(visible_title)}{Style.RESET_ALL}")
 
     def safe_input(self, prompt):
         try:
@@ -1102,15 +1114,26 @@ class ConsoleApp:
             self.clear_screen()
             print(self.main_banner)
             self.print_header(f"USER DASHBOARD - {self.current_user}")
-            L = 42  # fixed left column width
             print()
-            # ── Section headers ──────────────────────────────────────────
-            lh = f"{Fore.CYAN}  FILE OPERATIONS{Style.RESET_ALL}"
-            mh = f"{Fore.CYAN}ACCOUNT & SECURITY{Style.RESET_ALL}"
-            rh = f"{Fore.RED}DANGER ZONE{Style.RESET_ALL}"
-            print(f"{lh:<{L + 14}}{mh:<{L - 6}}{rh}")
-            # ── Menu rows ─────────────────────────────────────────────────
-            rows = [
+            
+            # Define menu structure
+            col1_width = 30  # visible characters for column 1
+            col2_width = 30  # visible characters for column 2
+            col3_width = 30  # visible characters for column 3
+            
+            # Headers
+            h1 = f"  {Fore.CYAN}FILE OPERATIONS{Style.RESET_ALL}"
+            h2 = f"{Fore.CYAN}ACCOUNT & SECURITY{Style.RESET_ALL}"
+            h3 = f"{Fore.RED}DANGER ZONE{Style.RESET_ALL}"
+            
+            # Calculate padding for headers
+            h1_len = self._visible_len(h1)
+            h2_len = self._visible_len(h2)
+            
+            print(f"{h1}{' ' * (col1_width - h1_len)}{h2}{' ' * (col2_width - h2_len)}{h3}")
+            
+            # Menu items
+            menu_rows = [
                 (f"  {Fore.GREEN}[1]{Style.RESET_ALL} Upload File", f"{Fore.GREEN}[7]{Style.RESET_ALL}  List My Keys", f"{Fore.RED}[13]{Style.RESET_ALL} Delete All My Data"),
                 (f"  {Fore.GREEN}[2]{Style.RESET_ALL} Download File", f"{Fore.GREEN}[8]{Style.RESET_ALL}  Delete a Key", f"{Fore.RED}[14]{Style.RESET_ALL} Delete My Account"),
                 (f"  {Fore.GREEN}[3]{Style.RESET_ALL} List My Files", f"{Fore.GREEN}[9]{Style.RESET_ALL}  Backup Keys", ""),
@@ -1118,8 +1141,12 @@ class ConsoleApp:
                 (f"  {Fore.GREEN}[5]{Style.RESET_ALL} Share a Key", f"{Fore.GREEN}[11]{Style.RESET_ALL} Recent Activity", ""),
                 (f"  {Fore.GREEN}[6]{Style.RESET_ALL} Delete a File", f"{Fore.RED}[12]{Style.RESET_ALL} Logout", ""),
             ]
-            for l, m, r in rows:
-                print(f"{l:<{L + 9}}{m:<{L - 10}}{r}")
+            
+            for c1, c2, c3 in menu_rows:
+                c1_len = self._visible_len(c1)
+                c2_len = self._visible_len(c2)
+                print(f"{c1}{' ' * (col1_width - c1_len)}{c2}{' ' * (col2_width - c2_len)}{c3}")
+            
             print()
             
             choice = self.safe_input("Select option: ")
@@ -1164,46 +1191,48 @@ class ConsoleApp:
         while True:
             self.clear_screen()
             self.print_header(f"ADMIN PANEL - {self.current_user}")
-            L = 42  # fixed left column width (visible chars)
             print()
-            # ── Section headers ──────────────────────────────────────────
-            lh = f"{Fore.CYAN}  USER MANAGEMENT{Style.RESET_ALL}"
-            rh = f"{Fore.CYAN}FILE & LOG MANAGEMENT{Style.RESET_ALL}"
-            print(f"{lh:<{L + 14}}{rh}")
-            # ── Rows 1-4 paired with 5-8 ─────────────────────────────────
-            rows_left  = [
-                f"  {Fore.GREEN}[1]{Style.RESET_ALL} View All Users",
-                f"  {Fore.GREEN}[2]{Style.RESET_ALL} Delete User Account",
-                f"  {Fore.GREEN}[3]{Style.RESET_ALL} Force Password Reset",
-                f"  {Fore.GREEN}[4]{Style.RESET_ALL} View All Files",
-                f"  {Fore.GREEN}[5]{Style.RESET_ALL} Reset User Password",
+            
+            col_width = 40  # visible characters per column
+            
+            # ═══ USER MANAGEMENT & FILE MANAGEMENT ═══
+            h1 = f"  {Fore.CYAN}USER MANAGEMENT{Style.RESET_ALL}"
+            h2 = f"{Fore.CYAN}FILE & LOG MANAGEMENT{Style.RESET_ALL}"
+            h1_len = self._visible_len(h1)
+            print(f"{h1}{' ' * (col_width - h1_len)}{h2}")
+            
+            rows1 = [
+                (f"  {Fore.GREEN}[1]{Style.RESET_ALL} View All Users", f"{Fore.GREEN}[6]{Style.RESET_ALL}  Delete Any File"),
+                (f"  {Fore.GREEN}[2]{Style.RESET_ALL} Delete User Account", f"{Fore.GREEN}[7]{Style.RESET_ALL}  View All Logs"),
+                (f"  {Fore.GREEN}[3]{Style.RESET_ALL} Force Password Reset", f"{Fore.GREEN}[8]{Style.RESET_ALL}  Export Logs"),
+                (f"  {Fore.GREEN}[4]{Style.RESET_ALL} View All Files", f"{Fore.GREEN}[9]{Style.RESET_ALL}  Clear All Logs"),
+                (f"  {Fore.GREEN}[5]{Style.RESET_ALL} Reset User Password", f"{Fore.GREEN}[10]{Style.RESET_ALL} Clear All Backups"),
             ]
-            rows_right = [
-                f"{Fore.GREEN}[6]{Style.RESET_ALL}  Delete Any File",
-                f"{Fore.GREEN}[7]{Style.RESET_ALL}  View All Logs",
-                f"{Fore.GREEN}[8]{Style.RESET_ALL}  Export Logs",
-                f"{Fore.GREEN}[9]{Style.RESET_ALL}  Clear All Logs",
-                f"{Fore.GREEN}[10]{Style.RESET_ALL} Clear All Backups",
-            ]
-            for l, r in zip(rows_left, rows_right):
-                # pad left col to fixed visible width (ANSI codes add ~9 invisible chars per colored token)
-                print(f"{l:<{L + 9}}{r}")
-            print(f"  {' ' * (L - 4)}{Fore.RED}[11]{Style.RESET_ALL} Delete All Files & Keys")
+            
+            for left, right in rows1:
+                left_len = self._visible_len(left)
+                print(f"{left}{' ' * (col_width - left_len)}{right}")
+            
+            # Centered danger option
+            danger = f"{Fore.RED}[11]{Style.RESET_ALL} Delete All Files & Keys"
+            danger_len = self._visible_len(danger)
+            print(f"  {' ' * (col_width - 4)}{danger}")
             print()
-            # ── System Administration ─────────────────────────────────────
-            print(f"{Fore.CYAN}  SYSTEM ADMINISTRATION{Style.RESET_ALL}")
-            sa_left  = [
-                f"  {Fore.GREEN}[12]{Style.RESET_ALL} System Statistics",
-                f"  {Fore.GREEN}[13]{Style.RESET_ALL} User Activity Summary",
-                f"  {Fore.GREEN}[14]{Style.RESET_ALL} Export Metadata",
+            
+            # ═══ SYSTEM ADMINISTRATION ═══
+            h3 = f"  {Fore.CYAN}SYSTEM ADMINISTRATION{Style.RESET_ALL}"
+            print(h3)
+            
+            rows2 = [
+                (f"  {Fore.GREEN}[12]{Style.RESET_ALL} System Statistics", f"{Fore.GREEN}[15]{Style.RESET_ALL} System Cleanup Utility"),
+                (f"  {Fore.GREEN}[13]{Style.RESET_ALL} User Activity Summary", f"{Fore.GREEN}[16]{Style.RESET_ALL} Maintenance Mode"),
+                (f"  {Fore.GREEN}[14]{Style.RESET_ALL} Export Metadata", f"{Fore.RED}[17]{Style.RESET_ALL} Logout"),
             ]
-            sa_right = [
-                f"{Fore.GREEN}[15]{Style.RESET_ALL} System Cleanup Utility",
-                f"{Fore.GREEN}[16]{Style.RESET_ALL} Maintenance Mode",
-                f"{Fore.RED}[17]{Style.RESET_ALL} Logout",
-            ]
-            for l, r in zip(sa_left, sa_right):
-                print(f"{l:<{L + 10}}{r}")
+            
+            for left, right in rows2:
+                left_len = self._visible_len(left)
+                print(f"{left}{' ' * (col_width - left_len)}{right}")
+            
             print()
             
             choice = self.safe_input("Select option: ")
